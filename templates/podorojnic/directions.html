@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}contries for emigration{% endblock title %}
+
+{% block content %}
+
+    <h1>Страны для эмиграции</h1>
+    <ul>
+        {% for direction in directions %}
+            <li><a href="{% url 'podorojnic:direction' direction.id %}">{{ direction }}</a></li>
+        {% empty %}
+            <li>Нет записей для просмотра</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'podorojnic:new_direction' %}">Добавить новую тему</a>
+{% endblock content %}

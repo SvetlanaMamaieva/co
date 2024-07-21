@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}  Direction - {{ direction }} | podorojnic {% endblock title %}
+{% block content %}
+    <p>Главная: {{ direction }}</p>
+    <p>Новые статьи :</p>
+
+    <a href="{% url 'podorojnic:new_entry' direction.id %}">Добавить описание</a>
+    <ul>
+        {% for entry in entries %}
+        <li>
+            <p>{{ entry.date_added|date:'M d, Y H:i' }}</p>
+            <p>{{ entry.text|linebreaks }}</p>
+            <p>
+                <a href="{% url 'podorojnic:edit_entry' entry.id  %}">Редактировать...</a>
+            </p>
+        </li>
+
+        {% empty %}
+            <li>Нет записей для просмотра</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

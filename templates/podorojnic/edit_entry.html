@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}edit entry | podorojnic{% endblock title %}
+{% block content %}
+    <p><a href="{% url 'podorojnic:direction' direction.id %}">{{ direction }}</a></p>
+
+    <p>Редактировать:</p>
+    <form action="{% url 'podorojnic:new_entry'  entry.id %}" method="post">
+    {% csrf_token %}
+     {{ form.as_p }}
+     <button name="submit">Cохранить</button>
+    </form>
+
+{% endblock content %}

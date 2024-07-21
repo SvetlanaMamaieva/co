@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>Поделиться своей историей:</p>
+    <form action="{% url 'podorojnic:new_stories' %}" method="post">
+    {% csrf_token %}
+     {{ form.as_p }}
+     <button name="submit">Поделиться своей историей</button>
+
+    </form>
+
+{% endblock content %}

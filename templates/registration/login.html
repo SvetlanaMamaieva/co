@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock title %}
+{% block content %}
+    <h1>Войти</h1>
+
+<!--    {% if form.errors %}-->
+<!--        <p> Неверный логин или пароль </p>-->
+<!--    {% endif %}-->
+
+    <form action="{% url 'users:login' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit"> Войти </button>
+        <input type='hidden' name="next" value="{% url 'podorojnic:index' %}">
+
+    </form>
+
+{% endblock content %}
