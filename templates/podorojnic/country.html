@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}  Country - {{ country }} | podorojnic {% endblock title %}
+{% block content %}
+    <p>Country: {{ country }}</p>
+    <p>Информация: </p>
+    <p>
+    <a href="{% url 'podorojnic:new_info' country.id %}">Добавить описание</a>
+    </p>
+        <ul>
+            {% for info in infos %}
+                <li>
+                     <p>{{ info.date_added|date:'M d, Y H:i' }}</p>
+                     <p>{{ info.text|linebreaks }}</p>
+                </li>
+            {% empty %}
+                <li>Нет новых записей</li>
+            {% endfor %}
+        </ul>
+
+{% endblock content %}

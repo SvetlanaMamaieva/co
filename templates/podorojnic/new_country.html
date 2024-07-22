@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}add new country | best_co{% endblock title %}
+{% block content %}
+
+    <p>Добавить страну:</p>
+
+    <form action="{% url 'podorojnic:new_country' %}" method="post">
+    {% csrf_token %}
+     {{ form.as_p }}
+     <button name="submit">Добавить страну</button>
+    </form>
+
+{% endblock content %}

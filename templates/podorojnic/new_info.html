@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}add new info | podorojnic{% endblock title %}
+{% block content %}
+    <p><a href="{% url 'podorojnic:country' country.id %}">{{ country }}</a></p>
+
+    <p>Добавить описание:</p>
+    <form action="{% url 'podorojnic:new_info'  country.id %}" method="post">
+    {% csrf_token %}
+     {{ form.as_p }}
+     <button name="submit">Добавить описание</button>
+    </form>
+
+{% endblock content %}

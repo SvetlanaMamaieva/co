@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Direction, Entry
+from .models import Direction, Entry, Country, Info
 
 class DirectionForm(forms.ModelForm):
 
@@ -18,6 +18,18 @@ class EntryForm(forms.ModelForm):
         widgets = {'text':forms.Textarea(attrs={'cols': 80})}
 
 
-class SimpleForm(forms.Form):
-    name = forms.CharField(max_length=100, label='Youe name')
-    email = forms.EmailField(label='Your email')
+class CountryForm(forms.ModelForm):
+
+    class Meta:
+        model = Country
+        fields = ['text',]
+        labels = {'text': ''}
+
+
+
+class InfoForm(forms.ModelForm):
+    class Meta:
+        model = Info
+        fields = ['text',]
+        labels = {'text':''}
+        widgets = {'text':forms.Textarea(attrs={'cols': 80})}

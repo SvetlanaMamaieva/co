@@ -2,8 +2,9 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-from  .models import Direction, Entry
-from .forms import DirectionForm, EntryForm, SimpleForm
+from  .models import Direction, Entry, Country, Info
+from .forms import DirectionForm, EntryForm, CountryForm, InfoForm
+
 def index(request):
     return render(request, 'podorojnic/index.html')
 
@@ -17,6 +18,8 @@ def directions(request):
     'podorojnic/directions.html',
     context=context
     )
+
+
 @login_required
 def direction(request, direction_id):
     direction = Direction.objects.get(id=direction_id)
@@ -38,14 +41,51 @@ def new_direction(request):
             direction = form.save(commit=False)
             direction.owner = request.user  # Set the owner to the current logged-in user
             direction.save()
-
             return redirect('podorojnic:directions')
-
     else:
         form = DirectionForm()
-
     context = {'form': form}
     return render(request, 'podorojnic/new_direction.html', context)
+
+def countries(request):
+    # directions = Direction.objects.filter(owner=request.user).order_by('date_added')
+    countries = Country.objects.order_by('date_added')
+    context = {'countries': countries}
+    return render(request,
+    'podorojnic/countries.html',
+    context=context
+    )
+
+@login_required
+def country(request, country_id):
+    country = Country.objects.get(id=country_id)
+    if country.owner != request.user:
+        raise Http404
+    infos = country.info_set.order_by('-date_added')
+    context = {'country':country, 'infos': infos}
+    return render(request,
+    'podorojnic/countries.html',
+    context=context
+    )
+
+
+@login_required
+def new_country(request):
+    if request.method == 'POST':
+        form = CountryForm(request.POST)
+        if form.is_valid():
+            country = form.save(commit=False)
+            country.owner = request.user
+            country.save()
+            return redirect('podorojnic:countries')
+    else:
+        form = CountryForm()
+    countries = Country.objects.all()
+    context = {'form': form}
+    return render(request,
+   'podorojnic/new_country.html', {'form':form, 'countries':countries})
+
+
 
 @login_required
 def new_entry(request, direction_id):
@@ -85,14 +125,20 @@ def edit_entry(request, entry_id):
         context=context
     )
 
-def best_co(request):
-    return render(request, 'podorojnic/best_co.html')
 
-def simple_from_view(request):
-    form = SimpleForm()
-    return render(
-       request,
-        'podorojnic/simple_from_view.html',
-        context={'form':form}
-    )
+@login_required
+def new_info(request, country_id):
+    country = Country.objects.get(id=country_id)
+    if request.method != 'POST':
+        form = InfoForm()
+    else:
+        form = InfoForm(request.POST)
+        if form.is_valid():
+            new_info = form.save(commit=False)
+            new_info.country = country
+            new_info.save()
+            return redirect('podorojnic:country', country_id=country_id)
+
+    context = {'country':country, 'form': form }
+    return render(request, 'podorojnic/new_info.html', context=context)
 
